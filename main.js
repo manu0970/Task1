@@ -3,6 +3,7 @@
 // Later one we will complete a version using imports + webpack
 
 // Isolated data array to a different file
+var barColor = d3.scaleOrdinal(d3.schemeCategory20);
 
 let margin = null,
     width = null,
@@ -105,6 +106,11 @@ function appendChartBars()
       .attr('height', function(d, i) {
         return height - y(d.sales);
       })
-      .attr('width', x.bandwidth)      
+      .attr('width', function(d){
+          return x.bandwidth() -5
+      })  
+      .attr('fill', function(d){
+          return barColor(d.product)
+      }) 
       ;
 }
