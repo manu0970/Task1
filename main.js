@@ -59,7 +59,7 @@ var totalSales = [
     
     // Now it's time to append to the list of Rectangles we already have
     var newRects = rects.enter();
-    
+    var barColor = d3.scaleOrdinal(d3.schemeCategory10);
     // Let's append a new Rectangles
     // UpperCorner:
     //    Starting x position, the start from the axis
@@ -74,10 +74,14 @@ var totalSales = [
       .attr('y', function(d, i) {
         return y(d.product);
       })
-      .attr('height', y.bandwidth)
+      .attr('height', function(d, i) {
+        return y.bandwidth() - 5;})
       .attr('width', function(d, i) {
         return x(d.sales);
-      });
+      })
+      .attr('fill', function(d) {
+        return barColor(d.product);
+       });
     
       // Add the X Axis
       svg.append("g")
