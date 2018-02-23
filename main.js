@@ -19,7 +19,7 @@ setupYScale();
 appendXAxis();
 appendYAxis();
 appendChartBars();
-
+AppendLegend();
 // 1. let's start by selecting the SVG Node
 function setupCanvasSize() {
     margin = {top: 100, left: 180, bottom: 120, right: 130};
@@ -114,3 +114,20 @@ function appendChartBars()
       }) 
       ;
 }
+
+function AppendLegend() {
+    // building a legend is as simple as binding
+    // more elements to the same data. in this case,
+    // <text> tags
+    svg.append('g')
+    .attr("transform", `translate(50, 0)`) 
+      .attr('class', 'legend')
+        .selectAll('text')
+        .data(totalSales)
+          .enter()
+            .append('text')
+              .text(function(d) { return '• ' + d.product; })
+              .attr('fill', function(d) { return barColor(d.product); })
+              .attr('y', function(d, i) { return 20 * (i + 1); })
+               
+  }
