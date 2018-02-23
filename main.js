@@ -21,10 +21,10 @@ appendChartBars();
 
 // 1. let's start by selecting the SVG Node
 function setupCanvasSize() {
-  margin = {top: 0, left: 80, bottom: 20, right: 30};
-  width = 960 - margin.left - margin.right;
-  height = 120 - margin.top - margin.bottom;
-}
+    margin = {top: 100, left: 180, bottom: 120, right: 130};
+    width = 960 - margin.left - margin.right;
+    height = 800 - margin.top - margin.bottom;
+  }
 
 function appendSvg(domElement) {
   svg = d3.select(domElement).append("svg")
@@ -41,13 +41,11 @@ function appendSvg(domElement) {
 // domain == data (data from 0 to maxSales) boundaries
 function setupXScale()
 {
-  var maxSales = d3.max(totalSales, function(d, i) {
-    return d.sales;
-  });
-
-  x = d3.scaleLinear()
-    .range([0, width])
-    .domain([0, maxSales]);
+    x = d3.scaleBand()
+    .rangeRound([0, width])
+    .domain(totalSales.map(function(d, i) {
+      return d.product;
+    }));
 
 }
 
@@ -56,11 +54,13 @@ function setupXScale()
 // Here we are generating an array of product names
 function setupYScale()
 {
-  y = d3.scaleBand()
-    .rangeRound([0, height])
-    .domain(totalSales.map(function(d, i) {
-      return d.product;
-    }));
+    var maxSales = d3.max(totalSales, function(d, i) {
+        return d.sales;
+    });
+
+    y = d3.scaleLinear()
+    .range([height,0])
+    .domain([0, maxSales]);
 }
 
 function appendXAxis() {
@@ -96,12 +96,15 @@ function appendChartBars()
     //           we just pass the sales and use the X axis conversion to
     //           get the right value
     newRects.append('rect')
-      .attr('x', x(0))
-      .attr('y', function(d, i) {
-        return y(d.product);
+      .attr('x', function(d, i) {
+        return x(d.product);
       })
-      .attr('height', y.bandwidth)
-      .attr('width', function(d, i) {
-        return x(d.sales);
-      });
+      .attr('y', function(d) {
+        return y(d.sales);
+      })     
+      .attr('height', function(d, i) {
+        return height - y(d.sales);
+      })
+      .attr('width', x.bandwidth)      
+      ;
 }
