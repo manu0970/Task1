@@ -118,6 +118,10 @@ function appendYAxis() {
 }
 ```
 We proceed to graph the bars within the axes. Those bars are represented as rectangles.
+- The rectangles have the dimensions X and Y.
+- The positions are determined by width and height.
+- The spacing in X is determined by the subtraction "x.bandwidth () -5".
+- The rectangles are colored with the "fill" attribute.
 ```javascript
 
 function appendChartBars()
